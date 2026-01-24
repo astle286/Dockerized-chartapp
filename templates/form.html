@@ -1,0 +1,87 @@
+<form method="POST" enctype="multipart/form-data" class="mb-4">
+    <!-- Upload CSV -->
+    <div class="mb-3">
+        <label class="form-label">Upload CSV File (only once)</label>
+        <input type="file" name="datafile" accept=".csv" class="form-control">
+    </div>
+
+    <!-- Theme Toggle (chart theme, not page theme) -->
+    <div class="mb-3">
+        <label class="form-label">Chart Theme</label>
+        <select name="theme" class="form-select">
+            <option value="plotly" {% if request.form.theme == "plotly" %}selected{% endif %}>Light Theme</option>
+            <option value="plotly_dark" {% if request.form.theme == "plotly_dark" %}selected{% endif %}>Dark Theme</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <!-- Chart A Config -->
+        <div class="col-md-6">
+            <h3>Chart A Settings</h3>
+            <div class="mb-3">
+                <label class="form-label">Chart Type</label>
+                <select name="charttype_a" class="form-select">
+                    <option value="line" {% if request.form.charttype_a == "line" %}selected{% endif %}>Line Chart</option>
+                    <option value="bar" {% if request.form.charttype_a == "bar" %}selected{% endif %}>Bar Chart</option>
+                    <option value="scatter" {% if request.form.charttype_a == "scatter" %}selected{% endif %}>Scatter Plot</option>
+                    <option value="pie" {% if request.form.charttype_a == "pie" %}selected{% endif %}>Pie Chart</option>
+                </select>
+            </div>
+            {% if columns %}
+            <div class="mb-3">
+                <label class="form-label">X Column</label>
+                <select name="xcol_a" class="form-select">
+                    {% for col in columns %}
+                        <option value="{{ col }}" {% if request.form.xcol_a == col %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Y Columns</label>
+                <select name="ycol_a" class="form-select" multiple>
+                    {% for col in columns %}
+                        <option value="{{ col }}" {% if col in request.form.getlist('ycol_a') %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple columns.</small>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Chart B Config -->
+        <div class="col-md-6">
+            <h3>Chart B Settings</h3>
+            <div class="mb-3">
+                <label class="form-label">Chart Type</label>
+                <select name="charttype_b" class="form-select">
+                    <option value="line" {% if request.form.charttype_b == "line" %}selected{% endif %}>Line Chart</option>
+                    <option value="bar" {% if request.form.charttype_b == "bar" %}selected{% endif %}>Bar Chart</option>
+                    <option value="scatter" {% if request.form.charttype_b == "scatter" %}selected{% endif %}>Scatter Plot</option>
+                    <option value="pie" {% if request.form.charttype_b == "pie" %}selected{% endif %}>Pie Chart</option>
+                </select>
+            </div>
+            {% if columns %}
+            <div class="mb-3">
+                <label class="form-label">X Column</label>
+                <select name="xcol_b" class="form-select">
+                    {% for col in columns %}
+                        <option value="{{ col }}" {% if request.form.xcol_b == col %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Y Columns</label>
+                <select name="ycol_b" class="form-select" multiple>
+                    {% for col in columns %}
+                        <option value="{{ col }}" {% if col in request.form.getlist('ycol_b') %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple columns.</small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Generate Charts</button>
+    <button type="submit" name="reset" value="true" class="btn btn-danger mt-3">Reset Dataset</button>
+</form>

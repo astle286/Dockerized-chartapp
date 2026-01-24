@@ -1,0 +1,35 @@
+{% if preview %}
+<!-- Trigger Button -->
+<button class="btn btn-outline-secondary mb-3" data-bs-toggle="modal" data-bs-target="#previewModal">
+    View Data Preview
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Data Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Limited Preview -->
+        <div id="previewContainerLimited" class="preview-visible">
+            {{ preview|safe }}
+        </div>
+
+        <!-- Full Table (hidden initially) -->
+        <div id="previewContainerFull" class="preview-hidden">
+            {{ full_table|safe }}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="togglePreview" class="btn btn-primary">Show Full Table</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
