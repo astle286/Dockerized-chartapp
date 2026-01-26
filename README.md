@@ -1,6 +1,6 @@
 # 📊 ChartApp
 
-ChartApp is a sleek Flask web app for uploading CSV files, generating interactive charts with Plotly, and previewing your dataset with style. Built for clarity, speed, and delight.
+ChartApp is a sleek Flask web app for uploading CSV files, generating interactive charts with Plotly, and previewing your dataset with style. Now fully **Dockerized** for easy deployment and scalability. Built for clarity, speed, and delight.
 
 ![ChartApp UI](https://raw.githubusercontent.com/astle286/chartapp/main/assets/chartapp-ui.png)
 
@@ -15,6 +15,8 @@ ChartApp is a sleek Flask web app for uploading CSV files, generating interactiv
 - 🧠 Multi-series plotting with dynamic dropdowns
 - 🔍 Toggle between limited and full data preview
 - 💡 Smooth transitions and animated theme switcher
+- 🩺 **Health Check Dashboard** — live system metrics (CPU, memory, disk) via `/dashboard`
+- 🐳 **Dockerized Deployment** — run anywhere with Docker & Compose
 
 ---
 
@@ -41,16 +43,34 @@ ChartApp is a sleek Flask web app for uploading CSV files, generating interactiv
 - **Bootstrap 5** — responsive UI
 - **Jinja2** — templating
 - **JavaScript** — theme and preview toggles
+- **Gunicorn** — production-ready WSGI server
+- **Docker + Compose** — containerized deployment
+- **psutil** — system metrics for health dashboard
 
 ---
 
 ## 📦 Setup
 
+### Local Development
 ```bash
 git clone https://github.com/astle286/chartapp.git
 cd chartapp
 pip install -r requirements.txt
 flask run
+
+Dockerized Deployment
+Build and run with Docker Compose:
+
+bash
+docker-compose up --build
+Access the app at:
+
+Code
+http://localhost:5000
+Health dashboard available at:
+
+Code
+http://localhost:5000/dashboard
 
 🧠 Future Ideas
 Export charts as PNG or PDF
@@ -69,4 +89,4 @@ Built with joy by Astle
 Modular, maintainable, and made to delight.
 
 📄 License
-MIT License — feel free to fork, remix, and build on it.
+MIT License — feel free to fork, remix, and build on 

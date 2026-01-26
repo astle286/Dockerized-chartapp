@@ -1,0 +1,10 @@
+services:
+  chartapp:
+    build: .
+    container_name: Dockerized_chartapp
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads   # persist uploaded files
+      - ./templates:/app/templates  # persist templates

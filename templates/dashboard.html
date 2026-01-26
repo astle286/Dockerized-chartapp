@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChartApp Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">ChartApp Dashboard</span>
+  </div>
+</nav>
+
+<div class="container my-4">
+  <div class="row">
+    <!-- CPU Card -->
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-header">CPU Usage</div>
+        <div class="card-body">
+          <div class="progress">
+            <div id="cpuBar" class="progress-bar" role="progressbar"></div>
+          </div>
+          <p id="cpuText"></p>
+        </div>
+      </div>
+    </div>
+    <!-- Memory Card -->
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-header">Memory Usage</div>
+        <div class="card-body">
+          <div class="progress">
+            <div id="memBar" class="progress-bar bg-success" role="progressbar"></div>
+          </div>
+          <p id="memText"></p>
+        </div>
+      </div>
+    </div>
+    <!-- Disk Card -->
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-header">Disk Usage</div>
+        <div class="card-body">
+          <div class="progress">
+            <div id="diskBar" class="progress-bar bg-warning" role="progressbar"></div>
+          </div>
+          <p id="diskText"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row my-4">
+    <div class="col-md-6">
+      <div id="cpuChart"></div>
+    </div>
+    <div class="col-md-6">
+      <div id="memChart"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function fetchHealth() {
+  const res = await fetch("/health");
+  const data = await res.json();
+
+  // Update progress bars
+  document.getElementById("cpuBar").style.width = data.cpu_percent + "%";
+  document.getElementById("cpuText").innerText = data.cpu_percent + "%";
+  document.getElementById("memBar").style.width = data.memory_percent + "%";
+  document.getElementById("memText").innerText = data.memory_percent + "%";
+  document.getElementById("diskBar").style.width = data.disk_percent + "%";
+  document.getElementById("diskText").innerText = data.disk_percent + "%";
+
+  // Update charts
+  Plotly.react("cpuChart", [{
+    x: [data.timestamp],
+    y: [data.cpu_percent],
+    type: "scatter"
+  }], {title: "CPU Usage Over Time"});
+
+  Plotly.react("memChart", [{
+    labels: ["Used", "Free"],
+    values: [data.memory_percent, 100 - data.memory_percent],
+    type: "pie"
+  }], {title: "Memory Distribution"});
+}
+
+// Refresh every 5 seconds
+setInterval(fetchHealth, 5000);
+fetchHealth();
+</script>
+
+</body>
+</html>

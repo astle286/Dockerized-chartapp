@@ -84,3 +84,26 @@ input:checked + .slider:before {
     transition: opacity 0.6s ease;
 }
 
+.dashboard-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+}
+
+.dashboard-btn a {
+    display: inline-block;
+    background-color: #343a40; /* dark gray */
+    color: white;
+    padding: 10px 12px;
+    border-radius: 50%;
+    text-align: center;
+    text-decoration: none;
+    opacity: 0.6; /* semi-transparent */
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+.dashboard-btn a:hover {
+    opacity: 1; /* fully visible on hover */
+    transform: scale(1.1); /* slight zoom effect */
+}
