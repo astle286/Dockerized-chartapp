@@ -9,11 +9,22 @@ import plotly.subplots as sp
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 
+# Prometheus integration
+from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter, Gauge
+
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Prometheus metrics setup
+metrics = PrometheusMetrics(app)
+
+# Custom metrics
+uploads_total = Counter("chartapp_uploads_total", "Total uploaded files")
+active_sessions = Gauge("chartapp_active_sessions", "Active user sessions")
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -25,6 +36,7 @@ def index():
         # Reset dataset
         if "reset" in request.form:
             session.pop("last_file", None)
+            active_sessions.dec()  # reduce active session count
             return redirect(url_for("index"))
 
         # Upload file (only once per session)
@@ -34,6 +46,8 @@ def index():
             filepath = os.path.join(UPLOAD_FOLDER, filename)
             file.save(filepath)
             session["last_file"] = filepath
+            uploads_total.inc()  # increment uploads counter
+            active_sessions.inc()  # increment active session count
 
         # Chart A config
         chart_type_a = request.form.get("charttype_a")
@@ -141,10 +155,12 @@ def health_check():
     }
     return jsonify(status), 200
 
+
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
 
+
 if __name__ == "__main__":
     # Debug mode ON for development, switch OFF in production
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
