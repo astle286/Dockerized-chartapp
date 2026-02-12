@@ -3,3 +3,5 @@ plotly
 pandas
 psutil
 gunicorn
+prometheus-flask-exporter 
+prometheus-client
